@@ -28,10 +28,10 @@ class AuthController extends Controller
             return response()->json(['error' => 'Sem utorização'], 401);
         }
 
-        return $this->createNewToken($token);
+        return $this->respondWithToken($token);
     }
 
-    public function createNewToken($token){
+    public function respondWithToken($token){
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
@@ -41,7 +41,7 @@ class AuthController extends Controller
     }
 
     public function profile(){
-        return response()->json(auth()->user());
+        return response()->json(auth()->user());;
     }
 
     public function logout(){

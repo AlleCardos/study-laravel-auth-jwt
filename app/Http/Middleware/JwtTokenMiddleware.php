@@ -2,8 +2,14 @@
 
 namespace App\Http\Middleware;
 
+use App\Exceptions\CustomException;
+use App\Exceptions\TokenNotProvidedException;
 use Closure;
+use Exception;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Claims\Custom;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 
 class JwtTokenMiddleware
 {
@@ -16,6 +22,13 @@ class JwtTokenMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        
+        $user = JWTAuth::parseToken()->authenticate();
+
+        if(!$user){
+            throw new CustomException("Error Processing Request", 1);
+        }
+        
         return $next($request);
     }
 }

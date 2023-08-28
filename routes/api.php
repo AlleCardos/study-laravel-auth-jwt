@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\CustomException;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,7 +27,9 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function($router){
     Route::post('/logout', [AuthController::class, 'logout']);
 });
 
-Route::middleware(['jwt.auth'])->group(function ($router) {
+Route::group(['middleware' => 'jwt'], function($router){
+    // throw new CustomException("Error Processing Request", 1);
+
     Route::get('/teste',function(){
         return 'oi';
     });
