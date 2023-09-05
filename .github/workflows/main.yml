@@ -3,17 +3,24 @@ name: Auto Pull Request
 on:
   push:
     branches:
-      - main  # Altere para a branch que deseja monitorar
+      - main  # Altere para o nome da branch que deseja monitorar
 
 jobs:
   create_pull_request:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main  # Branch de destino do pull request
-          title: Automated Pull Request
-          body: Automated pull request created on push to main branch
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "<seu-email>@example.com"
+          git checkout -b automatic-pull-request
+          git add .
+          git commit -m "Automated pull request"
+          git push -u origin automatic-pull-request
+          hub pull-request -m "Automated pull request" -b main -h automatic-pull-request
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
